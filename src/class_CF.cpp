@@ -5,7 +5,6 @@
 #include "class_CF.h"
 #include "utils_vector.h"
 #include "algo_calculations.h"
-#include <c++/cmath>
 
 CF::CF() {
     this->N = 0;

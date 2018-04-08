@@ -3,7 +3,6 @@
 //
 
 #include "utils_memory_consumption.h"
-#include <c++/cmath>
 
 #ifdef _WIN32
 //define something for Windows (32-bit and 64-bit, this part is common)

@@ -25,8 +25,8 @@ LNode::LNode(Vec point) {
     this->entries.push_back(std::make_shared<CF>(1, point, vec::squaredSum(point)));
 }
 
-NLNode::getBF() { return Global::get().getBF_B(); }
-LNode::getBF() { return Global::get().getBF_L(); }
+int NLNode::getBF() { return Global::get().getBF_B(); }
+int LNode::getBF() { return Global::get().getBF_L(); }
 
 int LNode::getMemoryConsumed() {
     // memory consumed by LNode

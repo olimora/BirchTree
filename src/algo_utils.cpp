@@ -56,6 +56,29 @@ std::vector<std::shared_ptr<BNode>> findClosestEntriesPair(std::vector<std::shar
     return returning;
 }
 
+double getClosestDistanceInEntries(std::vector<std::shared_ptr<CF>> ents) {
+//    std::cout << "calc start" << std::endl;
+    if (ents.size() < 2) {
+        return 0.;
+    }
+    double min_dist = distance(ents[0]->getCentroid(), ents[1]->getCentroid());
+    double act_dist = 0.;
+    if (ents.size() < 3) {
+        return min_dist;
+    }
+//    std::cout << "before loop" << std::endl;
+    for (int i = 2; i < int(ents.size()); i++) { // B
+        for (int j = 0; j < i; j++) {   // A
+            act_dist = distance(ents[j]->getCentroid(), ents[i]->getCentroid());
+            if (act_dist < min_dist) {
+                min_dist = act_dist;
+            }
+        }
+    }
+//    std::cout << "calc end" << std::endl;
+    return min_dist;
+}
+
 std::vector<std::shared_ptr<CF>> findFurthestEntries(std::vector<std::shared_ptr<CF>> ents) {
     int A = 0;
     int B = 1;

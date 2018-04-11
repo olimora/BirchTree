@@ -8,7 +8,7 @@
 
 CF::CF() {
     this->N = 0;
-    this->LS = vec::zeros();
+    this->LS = VEC::zeros();
     this->SS = 0.;
 }
 
@@ -42,7 +42,7 @@ double CF::getClusterSize(Vec point) {
 void CF::addPoint(Vec point) {
     this->N += 1;
     this->LS += point;
-    this->SS += vec::squaredSum(point);
+    this->SS += VEC::squaredSum(point);
 }
 
 int CF::getMemoryConsumed() {

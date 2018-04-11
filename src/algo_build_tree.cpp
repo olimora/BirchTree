@@ -1,6 +1,7 @@
 #include "algo_build_tree.h"
 #include "algo_utils.h"
 #include "include_global.h"
+#include "algo_rebuild_tree.h"
 
 void addPointToTree(std::shared_ptr<CFTree> tree, Vec point);
 
@@ -23,7 +24,6 @@ void addPointToTree(std::shared_ptr<CFTree> tree, Vec point) {
     std::vector<std::shared_ptr<NLNode>> returned = addPointToNode(tree->root, point);
     if (returned.size() == 1) {  // if one node. no splitting in lover lvl, just update CF //TODO:: is cf updated in lower lvl?
         tree->point_count++;
-        return;
     } else if (returned.size() == 2) { // if two nodes, need to split root node = make new root node and add those two as his entries
         tree->root = std::make_shared<NLNode>();
         tree->root->entries.push_back(returned[0]);
@@ -31,10 +31,12 @@ void addPointToTree(std::shared_ptr<CFTree> tree, Vec point) {
         tree->root->cf = std::make_shared<CF>(returned[0]->cf, returned[1]->cf);
         tree->point_count++;
         tree->NLNode_count++;
-        return;
     } else { // cant happen
         throw std::logic_error( "Returned invalid number of nodes to root in insertion process." );
     }
+
+    // check for rebuilding algorithm
+    rebuildTreeIfNeeded();
 }
 
 std::vector<std::shared_ptr<NLNode>> addPointToNode(std::shared_ptr<NLNode> node, Vec point) {
@@ -112,7 +114,7 @@ std::vector<std::shared_ptr<NLNode>> addPointToNode(std::shared_ptr<NLNode> node
         }
     } else { // does not have any entry. need to add LeafNode, and place point in new LeafNode
         node->entries.push_back(std::make_shared<LNode>(point));
-        Global::get().getTree()->subclusters++;
+        Global::get().getTree()->subcluster_count++;
         Global::get().getTree()->LNode_count++;
         returning.push_back(node);
         return returning;
@@ -134,8 +136,8 @@ std::vector<std::shared_ptr<LNode>> addPointToLeafNode(std::shared_ptr<LNode> no
 
         } else { // else - closest entry cant absorb
             if (int(node->entries.size()) < Global::get().getBF_L()) { // add entry if it can hold one more
-                node->entries.push_back(std::make_shared<CF>(1, point, vec::squaredSum(point)));
-                Global::get().getTree()->subclusters++;
+                node->entries.push_back(std::make_shared<CF>(1, point, VEC::squaredSum(point)));
+                Global::get().getTree()->subcluster_count++;
                 node->cf->addPoint(point);
                 returning.push_back(node);
                 return returning;
@@ -144,8 +146,8 @@ std::vector<std::shared_ptr<LNode>> addPointToLeafNode(std::shared_ptr<LNode> no
             }
         }
     } else { // has no entries, cant search for closest. add one. and is resolved
-        node->entries.push_back(std::make_shared<CF>(1, point, vec::squaredSum(point)));
-        Global::get().getTree()->subclusters++;
+        node->entries.push_back(std::make_shared<CF>(1, point, VEC::squaredSum(point)));
+        Global::get().getTree()->subcluster_count++;
         node->cf->addPoint(point);
         returning.push_back(node);
         return returning;
@@ -337,8 +339,8 @@ std::vector<std::shared_ptr<LNode>> splitNode(std::shared_ptr<LNode> node, Vec p
     returning.reserve(2);
 
     std::vector<std::shared_ptr<CF>> old_ents (node->entries);  // copy old vector of entries //if memory problems. copy / swap?
-    old_ents.push_back(std::make_shared<CF>(1, point, vec::squaredSum(point)));   // add new entry, so it can be chosen as seed too
-    Global::get().getTree()->subclusters++;
+    old_ents.push_back(std::make_shared<CF>(1, point, VEC::squaredSum(point)));   // add new entry, so it can be chosen as seed too
+    Global::get().getTree()->subcluster_count++;
     std::vector<std::shared_ptr<CF>> seeds = findFurthestEntries(old_ents);  // find the fursthest entries = seeds
     node->entries.clear();        // clear the original one so we can populate it
     std::shared_ptr<LNode> new_node = std::make_shared<LNode>();    // make new node with entries vector to populate

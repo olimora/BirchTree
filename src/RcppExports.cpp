@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // buildTree
-void buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T, std::string distance_metric, std::string cluster_size_metric);
-RcppExport SEXP _BirchTree_buildTree(SEXP dataSEXP, SEXP BF_BSEXP, SEXP BF_LSEXP, SEXP threshold_TSEXP, SEXP distance_metricSEXP, SEXP cluster_size_metricSEXP) {
+void buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T, std::string distance_metric, std::string cluster_size_metric, int memory_limit_MB, int subcluster_limit, double rebuild_size_factor);
+RcppExport SEXP _BirchTree_buildTree(SEXP dataSEXP, SEXP BF_BSEXP, SEXP BF_LSEXP, SEXP threshold_TSEXP, SEXP distance_metricSEXP, SEXP cluster_size_metricSEXP, SEXP memory_limit_MBSEXP, SEXP subcluster_limitSEXP, SEXP rebuild_size_factorSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
@@ -16,13 +16,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type threshold_T(threshold_TSEXP);
     Rcpp::traits::input_parameter< std::string >::type distance_metric(distance_metricSEXP);
     Rcpp::traits::input_parameter< std::string >::type cluster_size_metric(cluster_size_metricSEXP);
-    buildTree(data, BF_B, BF_L, threshold_T, distance_metric, cluster_size_metric);
+    Rcpp::traits::input_parameter< int >::type memory_limit_MB(memory_limit_MBSEXP);
+    Rcpp::traits::input_parameter< int >::type subcluster_limit(subcluster_limitSEXP);
+    Rcpp::traits::input_parameter< double >::type rebuild_size_factor(rebuild_size_factorSEXP);
+    buildTree(data, BF_B, BF_L, threshold_T, distance_metric, cluster_size_metric, memory_limit_MB, subcluster_limit, rebuild_size_factor);
     return R_NilValue;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_BirchTree_buildTree", (DL_FUNC) &_BirchTree_buildTree, 6},
+    {"_BirchTree_buildTree", (DL_FUNC) &_BirchTree_buildTree, 9},
     {NULL, NULL, 0}
 };
 

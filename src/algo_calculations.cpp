@@ -39,7 +39,7 @@ double calculateRadius(int N, Vec LS, double SS, Vec C) {
 
 double calculateRadius(std::shared_ptr<CF> cf, Vec point) {
     if (point.size() > 0) {
-        return calculateRadius(cf->N +1 , cf->LS + point, cf->SS + vec::squaredSum(point),
+        return calculateRadius(cf->N +1 , cf->LS + point, cf->SS + VEC::squaredSum(point),
                                calculateCentroid(cf->LS + point, cf->N + 1));
     } else {
         return calculateRadius(cf->N, cf->LS, cf->SS, calculateCentroid(cf->LS, cf->N));
@@ -54,7 +54,7 @@ double calculateDiameter(int N, Vec LS, double SS) {
 
 double calculateDiameter(std::shared_ptr<CF> cf, Vec point) {
     if (point.size() > 0) {
-        return calculateDiameter(cf->N +1 , cf->LS + point, cf->SS + vec::squaredSum(point));
+        return calculateDiameter(cf->N +1 , cf->LS + point, cf->SS + VEC::squaredSum(point));
     } else {
         return calculateDiameter(cf->N, cf->LS, cf->SS);
     }

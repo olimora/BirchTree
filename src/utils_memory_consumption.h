@@ -14,11 +14,11 @@
 /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa366770(v=vs.85).aspx
 //////////////////////////////////////////////////////////////////////////
 
-namespace memory {
+namespace MEMORY {
     float getTotalPhysical();
-    float getAvailiblePhysical();
+    float getAvailablePhysical();
     float getTotalVirtual();
-    float getAvailibleVirtual();
+    float getAvailableVirtual();
     float getConsumedVirtual();
     float getConsumedPhysical();
 }

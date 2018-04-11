@@ -22,6 +22,7 @@ public:
     int subcluster_count;
 
     CFTree();
+    int getPointCount();
 };
 
 #endif //BIRCH_TREE_CLASS_CFTREE_H

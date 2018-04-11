@@ -23,13 +23,13 @@ void addPointToTree(std::shared_ptr<CFTree> tree, Vec point) {
     //   - if two nodes, need to split root node = make new root node and add those two as his entries
     std::vector<std::shared_ptr<NLNode>> returned = addPointToNode(tree->root, point);
     if (returned.size() == 1) {  // if one node. no splitting in lover lvl, just update CF //TODO:: is cf updated in lower lvl?
-        tree->point_count++;
+//        tree->point_count++;
     } else if (returned.size() == 2) { // if two nodes, need to split root node = make new root node and add those two as his entries
         tree->root = std::make_shared<NLNode>();
         tree->root->entries.push_back(returned[0]);
         tree->root->entries.push_back(returned[1]);
         tree->root->cf = std::make_shared<CF>(returned[0]->cf, returned[1]->cf);
-        tree->point_count++;
+//        tree->point_count++;
         tree->NLNode_count++;
     } else { // cant happen
         throw std::logic_error( "Returned invalid number of nodes to root in insertion process." );

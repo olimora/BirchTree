@@ -10,6 +10,6 @@ CFTree::CFTree() {
     this->point_count = 0;
     this->NLNode_count = 1;
     this->LNode_count = 0;
-    this->subclusters = 0;
+    this->subcluster_count = 0;
 }
 

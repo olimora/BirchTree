@@ -9,7 +9,7 @@
 
 using Vec = std::valarray<double>;
 
-namespace vec {
+namespace VEC {
     Vec zeros();
 
     double squaredSum(Vec point);

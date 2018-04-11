@@ -18,6 +18,7 @@ std::shared_ptr<BNode> findNodesClosestEntry(std::shared_ptr<NLNode> node, Vec p
 std::shared_ptr<CF> findNodesClosestEntry(std::shared_ptr<LNode> node, Vec point);
 
 std::vector<std::shared_ptr<BNode>> findClosestEntriesPair(std::vector<std::shared_ptr<BNode>> ents);
+double getClosestDistanceInEntries(std::vector<std::shared_ptr<CF>> ents);
 
 std::vector<std::shared_ptr<BNode>> findFurthestEntries(std::vector<std::shared_ptr<BNode>> ents);
 std::vector<std::shared_ptr<CF>> findFurthestEntries(std::vector<std::shared_ptr<CF>> ents);

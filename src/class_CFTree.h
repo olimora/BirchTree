@@ -19,7 +19,7 @@ public:
     int point_count;
     int NLNode_count;
     int LNode_count;
-    int subclusters;
+    int subcluster_count;
 
     CFTree();
 };

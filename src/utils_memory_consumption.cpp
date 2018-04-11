@@ -13,7 +13,7 @@
 #include "windows.h"
 #include "psapi.h"
 
-namespace memory {
+namespace MEMORY {
 
     typedef unsigned __int64 ULONGLONG;
     typedef ULONGLONG DWORDLONG, *PDWORDLONG;
@@ -29,7 +29,7 @@ namespace memory {
         return bytesToMegabytes(memInfo.ullTotalPhys);
     }
 
-    float getAvailiblePhysical() {
+    float getAvailablePhysical() {
         MEMORYSTATUSEX memInfo;
         memInfo.dwLength = sizeof(MEMORYSTATUSEX);
         GlobalMemoryStatusEx(&memInfo);
@@ -43,7 +43,7 @@ namespace memory {
         return bytesToMegabytes(memInfo.ullTotalPageFile);
     }
 
-    float getAvailibleVirtual() {
+    float getAvailableVirtual() {
         MEMORYSTATUSEX memInfo;
         memInfo.dwLength = sizeof(MEMORYSTATUSEX);
         GlobalMemoryStatusEx(&memInfo);
@@ -78,7 +78,7 @@ namespace memory {
 #include "stdio.h"
 #include "string.h"
 
-namespace memory {
+namespace MEMORY {
 
     struct sysinfo memInfo;
 
@@ -113,7 +113,7 @@ namespace memory {
         return bytesToMegabytes(totalPhysMem);
     }
 
-    float getAvailibleVirtual() {
+    float getAvailableVirtual() {
         sysinfo (&memInfo);
         long long availible = memInfo.freeram;
         //Add other values in next statement to avoid int overflow on right hand side...
@@ -122,7 +122,7 @@ namespace memory {
         return bytesToMegabytes(availible);
     }
 
-    float getAvailiblePhysical() {
+    float getAvailablePhysical() {
         sysinfo (&memInfo);
         long long availible = memInfo.freeram;
         //Add other values in next statement to avoid int overflow on right hand side...

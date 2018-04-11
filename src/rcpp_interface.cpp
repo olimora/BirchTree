@@ -8,13 +8,14 @@
 #include "utils_check_tree.h"
 #include "utils_nodes_counts.h"
 #include "utils_memory_consumption.h"
+#include "utils_return_matrix.h"
 
 
 using namespace Rcpp;
 
-int getIndexInMatrix(int row, int col, int rows) {
-    return col * rows + row;
-}
+//int getIndexInMatrix(int row, int col, int rows) {
+//    return col * rows + row;
+//}
 
 /**
  *
@@ -29,7 +30,7 @@ int getIndexInMatrix(int row, int col, int rows) {
  * @param rebuild_size_factor -- 1 default - the bigger, the smaller is new T, and change in tree size
  */
 // [[Rcpp::export]]
-void buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
+NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
                std::string distance_metric = "euclid", std::string cluster_size_metric = "radius",
                int memory_limit_MB = 0, int subcluster_limit = 50000, double rebuild_size_factor = 1) {
     int rows = data.nrow();
@@ -87,5 +88,11 @@ void buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
     std::cout << "Available Virtual: " << MEMORY::getAvailableVirtual() << std::endl;
     std::cout << "Consumed Virtual: " << MEMORY::getConsumedVirtual() << std::endl;
 
-    return;
+    // return subclusters in matrix: rows == subclusters, columns = centroid dimensions (//+N, +radius/diameter == clustersize )
+    std::cout << "Points in tree = " << Global::get().getTree()->getPointCount() << std::endl;
+
+    NumericMatrix ret(getRowsCount(), getColsCount());
+    fillReturnMatrixWithSubclusters(Global::get().getTree(), ret.begin());
+
+    return ret;
 }

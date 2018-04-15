@@ -9,6 +9,7 @@
 #include "utils_nodes_counts.h"
 #include "utils_memory_consumption.h"
 #include "utils_return_matrix.h"
+#include "algo_outliers_removal.h"
 
 
 using namespace Rcpp;
@@ -32,7 +33,9 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
                std::string distance_metric = "euclid", std::string cluster_size_metric = "radius",
-               int memory_limit_MB = 0, int subcluster_limit = 50000, double rebuild_size_factor = 1) {
+               int memory_limit_MB = 0, int subcluster_limit = 50000, double rebuild_size_factor = 1,
+               bool remove_outliers = true) {
+
     int rows = data.nrow();
     int cols = data.ncol();
 
@@ -47,50 +50,52 @@ NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold
     Global::get().setSubclusterLimit(subcluster_limit);
     Global::get().setRebuildSizeFactor(rebuild_size_factor);
     Global::get().rebuild_count = 0;
+    Global::get().setRemoveOutliers(remove_outliers);
 
     std::cout << "Building CF-Tree start" << std::endl;
 
     // build empty tree
     Global::get().makeTree();
-
     // add point by point
-    Vec point = VEC::zeros();
-    for (int r = 0; r < rows; r++) { //
-        // make point from data
-        for (int c = 0; c < cols; c++) {
+    Vec point = VEC::zeros(); // make point from data
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {   // fill the point values
             point[c] = data[getIndexInMatrix(r, c, rows)];
         }
-
-        // add point to tree
-        addPointToTree(Global::get().getTree(), point);
+        addPointToTree(Global::get().getTree(), point); // add point to tree
     }
 
     std::cout << "Building CF-Tree end" << std::endl;
     std::cout << "Rebuild count = " << Global::get().rebuild_count << std::endl;
 
+    // remove outliers
+    if (Global::get().getRemoveOutliers()) {
+        removeOutliers();
+    }
+
 //    checkTheTree(tree);
 
-//    std::vector<int> nodesCounts = cauntNodesCounts(tree);
-//    std::cout << "Nodes Counts control func: NLNode = " << nodesCounts[0]
-//              << "; LNode = " << nodesCounts[1]
-//              << "; Subclusters = " << nodesCounts[2]
-//              << "; Memory = " << nodesCounts[3] << std::endl;
+    std::vector<int> nodesCounts = cauntNodesCounts(Global::get().getTree());
+    std::cout << "Nodes Counts control func: NLNode = " << nodesCounts[0]
+              << "; LNode = " << nodesCounts[1]
+              << "; Subclusters = " << nodesCounts[2]
+              << "; Memory = " << nodesCounts[3] << std::endl;
 
     std::cout << "Nodes Counts mantained: NLNode = " << Global::get().getTree()->NLNode_count
             << "; LNode = " << Global::get().getTree()->LNode_count
             << "; Subclusters = " <<Global::get().getTree()->subcluster_count << std::endl;
 
-    std::cout << "Total Physical: " << MEMORY::getTotalPhysical() << std::endl;
-    std::cout << "Available Physical: " << MEMORY::getAvailablePhysical() << std::endl;
-    std::cout << "Consumed Physical: " << MEMORY::getConsumedPhysical() << std::endl;
+//    std::cout << "Total Physical: " << MEMORY::getTotalPhysical() << std::endl;
+//    std::cout << "Available Physical: " << MEMORY::getAvailablePhysical() << std::endl;
+//    std::cout << "Consumed Physical: " << MEMORY::getConsumedPhysical() << std::endl;
+//
+//    std::cout << "Total Virtual: " << MEMORY::getTotalVirtual() << std::endl;
+//    std::cout << "Available Virtual: " << MEMORY::getAvailableVirtual() << std::endl;
+//    std::cout << "Consumed Virtual: " << MEMORY::getConsumedVirtual() << std::endl;
 
-    std::cout << "Total Virtual: " << MEMORY::getTotalVirtual() << std::endl;
-    std::cout << "Available Virtual: " << MEMORY::getAvailableVirtual() << std::endl;
-    std::cout << "Consumed Virtual: " << MEMORY::getConsumedVirtual() << std::endl;
-
-    // return subclusters in matrix: rows == subclusters, columns = centroid dimensions (//+N, +radius/diameter == clustersize )
     std::cout << "Points in tree = " << Global::get().getTree()->getPointCount() << std::endl;
 
+    // return subclusters in matrix: rows == subclusters, columns = centroid dimensions (//+N, +radius/diameter == clustersize )
     NumericMatrix ret(getRowsCount(), getColsCount());
     fillReturnMatrixWithSubclusters(Global::get().getTree(), ret.begin());
 

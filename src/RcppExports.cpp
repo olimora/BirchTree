@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // buildTree
-NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T, std::string distance_metric, std::string cluster_size_metric, int memory_limit_MB, int subcluster_limit, double rebuild_size_factor);
-RcppExport SEXP _BirchTree_buildTree(SEXP dataSEXP, SEXP BF_BSEXP, SEXP BF_LSEXP, SEXP threshold_TSEXP, SEXP distance_metricSEXP, SEXP cluster_size_metricSEXP, SEXP memory_limit_MBSEXP, SEXP subcluster_limitSEXP, SEXP rebuild_size_factorSEXP) {
+NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T, std::string distance_metric, std::string cluster_size_metric, int memory_limit_MB, int subcluster_limit, double rebuild_size_factor, bool remove_outliers);
+RcppExport SEXP _BirchTree_buildTree(SEXP dataSEXP, SEXP BF_BSEXP, SEXP BF_LSEXP, SEXP threshold_TSEXP, SEXP distance_metricSEXP, SEXP cluster_size_metricSEXP, SEXP memory_limit_MBSEXP, SEXP subcluster_limitSEXP, SEXP rebuild_size_factorSEXP, SEXP remove_outliersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,13 +20,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type memory_limit_MB(memory_limit_MBSEXP);
     Rcpp::traits::input_parameter< int >::type subcluster_limit(subcluster_limitSEXP);
     Rcpp::traits::input_parameter< double >::type rebuild_size_factor(rebuild_size_factorSEXP);
-    rcpp_result_gen = Rcpp::wrap(buildTree(data, BF_B, BF_L, threshold_T, distance_metric, cluster_size_metric, memory_limit_MB, subcluster_limit, rebuild_size_factor));
+    Rcpp::traits::input_parameter< bool >::type remove_outliers(remove_outliersSEXP);
+    rcpp_result_gen = Rcpp::wrap(buildTree(data, BF_B, BF_L, threshold_T, distance_metric, cluster_size_metric, memory_limit_MB, subcluster_limit, rebuild_size_factor, remove_outliers));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_BirchTree_buildTree", (DL_FUNC) &_BirchTree_buildTree, 9},
+    {"_BirchTree_buildTree", (DL_FUNC) &_BirchTree_buildTree, 10},
     {NULL, NULL, 0}
 };
 

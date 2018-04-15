@@ -13,6 +13,7 @@
 #include "include_basic.h"
 
 void rebuildTreeIfNeeded();
+void rebuildTreeBeforeOutliersRemoval();
 
 
 #endif //BIRCH_TREE_ALGO_REBUILD_TREE_H

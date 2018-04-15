@@ -26,4 +26,6 @@ double calculateDiameter(std::shared_ptr<CF> cf, Vec point);
 
 //double calculateDiameter(int N, Vec LS, double SS);
 
+double calculateDensity(std::shared_ptr<CF> cf);
+
 #endif

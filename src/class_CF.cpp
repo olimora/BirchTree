@@ -58,3 +58,7 @@ int CF::getMemoryConsumed() {
 //    return calculateRadius(this->N + 1, this->LS + point, this->SS + vec::squaredSum(point), calculateCentroid(this->LS + point, this->N + 1));
 //}
 
+double CF::getDensity() {
+    return calculateDensity(shared_from_this());
+}
+

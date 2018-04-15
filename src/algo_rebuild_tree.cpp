@@ -54,9 +54,13 @@ void rebuildTreeIfNeeded() {
         std::cout << "Rebuilding tree. " << std::endl;
         rebuildTree();
         Global::get().rebuild_count++;
-        std::cout << "/////////////////////////////////////////////////" << std::endl;
+        std::cout << "/// Rebuilding Tree ///////////////////////////////" << std::endl;
 //        throw std::invalid_argument( "Rebuilding tree. ");
     }
+}
+
+void rebuildTreeBeforeOutliersRemoval() {
+    rebuildTree();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,11 +83,6 @@ void rebuildTree() {
     Rebuilder::get().getTree()->root->cf->LS = Global::get().getTree()->root->cf->LS;
     Rebuilder::get().getTree()->root->cf->SS = Global::get().getTree()->root->cf->SS;
 
-//    bool isRebuildingDone = false;
-
-    // building new tree
-//    std::cout << "wtf1" << std::endl;
-//    checkTheTree(Global::get().getTree());
     std::cout << "Nodes Counts mantained Before: NLNode = " << Global::get().getTree()->NLNode_count
               << "; LNode = " << Global::get().getTree()->LNode_count
               << "; Subclusters = " <<Global::get().getTree()->subcluster_count << std::endl;
@@ -91,16 +90,11 @@ void rebuildTree() {
     recursiveRebuild(Global::get().getTree()->root);
 
     std::shared_ptr<BNode> root = std::dynamic_pointer_cast<BNode>(Rebuilder::get().getTree()->root);
-//    std::cout << "wtf" << std::endl;
-//    checkTheTree(Global::get().getTree());
-    // update CFs in new tree, nodes counts
-//    Global::get()->set
     updateNewTree(root);
 
     std::cout << "Nodes Counts mantained After: NLNode = " << Rebuilder::get().getTree()->NLNode_count
               << "; LNode = " << Rebuilder::get().getTree()->LNode_count
               << "; Subclusters = " << Rebuilder::get().getTree()->subcluster_count << std::endl;
-//    checkTheTree(Rebuilder::get().getTree());
 
     std::cout << "Available phys = " << MEMORY::getAvailablePhysical()
               << "; Consumed phys = " << MEMORY::getConsumedPhysical()
@@ -146,25 +140,16 @@ void recursiveRebuild(std::shared_ptr<BNode> node) {
 }
 
 void copyNode(std::shared_ptr<BNode> original, std::shared_ptr<BNode> actual, int lvl) {
-//    std::cout << "lvl = " << lvl << ", OCP = ";
-//    for (auto item : Rebuilder::get().old_current_path) {
-//        std::cout << item << ", ";
-//    }
-//    std::cout << "//////////////////////////////////////////////////" << std::endl;
-
     if (Rebuilder::get().old_current_path.size() == 0) { // got called from root - root is already created, do nothing
-//        std::cout << "fallen to option: got called from root" << std::endl;
         return;
     }
     // create actual->entries[indx] node as original node is
     // indx = old_current_path[lvl]
     if (lvl+1 == int(Rebuilder::get().old_current_path.size())) { // now add new node
-//        std::cout << "fallen to option: now add new node branch" << std::endl;
         int indx = Rebuilder::get().old_current_path[lvl];
         std::shared_ptr<NLNode> actuall = std::dynamic_pointer_cast<NLNode>(actual);
 
         if (indx == int(actuall->entries.size())) { // good, push back new node to entries
-//            std::cout << "fallen to option: good, push back new node to entries " << std::endl;
             std::shared_ptr<BNode> new_node;
             if (original->isLeafNode()) {
                 new_node = std::make_shared<LNode>();
@@ -179,7 +164,6 @@ void copyNode(std::shared_ptr<BNode> original, std::shared_ptr<BNode> actual, in
             actuall->entries.push_back(new_node);
             return;
         } else if (indx+1 == int(actuall->entries.size())) { // this node is already created
-//            std::cout << "fallen to option: this node is already created " << std::endl;
             // check if it is the same node  // just for control
             if (original->cf->N == actuall->entries[indx]->cf->N
                 && original->cf->SS == actuall->entries[indx]->cf->SS) {
@@ -189,7 +173,6 @@ void copyNode(std::shared_ptr<BNode> original, std::shared_ptr<BNode> actual, in
                 throw std::logic_error( "Badly constructed new tree. Ex 0. ");
             }
         } else {
-//            std::cout << "fallen to option: this shoud not happen goddamn " << std::endl;
             throw std::logic_error( "Badly constructed new tree. Ex 1. ");
         }
         return;
@@ -299,6 +282,7 @@ void updateNewTree(std::shared_ptr<BNode>& node) {
         if (nlnode->entries.size() == 0) { // if has no entries, reset == delete this from parent as well
             nlnode.reset();
             node.reset();
+            Rebuilder::get().getTree()->NLNode_count--;
             return;
         }
     } else { // leaf node

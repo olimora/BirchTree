@@ -60,4 +60,10 @@ double calculateDiameter(std::shared_ptr<CF> cf, Vec point) {
     }
 }
 
-
+double calculateDensity(std::shared_ptr<CF> cf) {
+    if (cf->getClusterSize() == 0) {
+        return 0;
+    } else {
+        return cf->N / cf->getClusterSize();
+    }
+}

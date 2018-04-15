@@ -27,6 +27,7 @@ public:
 
     double getClusterSize();
     double getClusterSize(Vec point);
+    double getDensity();
 
     void addPoint(Vec point);
 

@@ -27,6 +27,8 @@ private:
     int subcluster_limit;
     double rebuild_size_factor;
 
+    bool remove_outliers;
+
 	distanceFPtr distanceFunc;
     clusterSizeFPtr clusterSizeFunc;
 
@@ -65,7 +67,11 @@ public:
     double getRebuildSizeFactor() { return this->rebuild_size_factor; }
     void setRebuildSizeFactor(double rebuild_size_factor) { this->rebuild_size_factor = rebuild_size_factor;  }
 
-    void setDistanceMetric(std::string metric) { this->distanceFunc = assignDistanceMetric(metric); }
+	bool getRemoveOutliers() { return this->remove_outliers; }
+	void setRemoveOutliers(bool remove_outliers) { this->remove_outliers = remove_outliers;  }
+
+
+	void setDistanceMetric(std::string metric) { this->distanceFunc = assignDistanceMetric(metric); }
     double calculateDistance(Vec A, Vec B) { return this->distanceFunc(A, B); }
 
     void setClusterSizeMetric(std::string metric) { this->clusterSizeFunc = assignClusterSizeMetric(metric); }

@@ -28,6 +28,7 @@ private:
     double rebuild_size_factor;
 
     bool remove_outliers;
+    int rebuild_count_before_outlier_removal;
 
 	distanceFPtr distanceFunc;
     clusterSizeFPtr clusterSizeFunc;
@@ -69,6 +70,9 @@ public:
 
 	bool getRemoveOutliers() { return this->remove_outliers; }
 	void setRemoveOutliers(bool remove_outliers) { this->remove_outliers = remove_outliers;  }
+
+    int getRebuildCount() { return this->rebuild_count_before_outlier_removal; }
+    void setRebuildCount(int rc) { this->rebuild_count_before_outlier_removal = rc;  }
 
 
 	void setDistanceMetric(std::string metric) { this->distanceFunc = assignDistanceMetric(metric); }

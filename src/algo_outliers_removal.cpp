@@ -6,8 +6,9 @@
 #include "algo_rebuild_tree.h"
 #include "include_global.h"
 #include "algo_utils.h"
+#include <map>
 
-double min_density;
+double root_density;
 int outliers_removed_subclusters;
 int outliers_removed_points;
 
@@ -15,18 +16,38 @@ void findCandidates(std::shared_ptr<BNode> node, std::vector<std::shared_ptr<CF>
 bool isCandidate(std::shared_ptr<CF>& cf);
 void tryInsertCandidates(std::vector<std::shared_ptr<CF>>& candidates);
 bool insertCandidate(std::shared_ptr<BNode> node, std::shared_ptr<CF> candidate);
+void fillValidityScores(std::shared_ptr<BNode> node, std::map<float, int>& validityScores);
 
 void removeOutliers() {
     std::cout << "/// Outlier Removal ///////////////////////////////////////////" << std::endl;
     // rebuild tree with the same threshold_T, to merge leaf entries, that are not outleirs
     std::cout << "Rebuilding tree to merge leaf entries." << std::endl;
-    rebuildTreeBeforeOutliersRemoval();
+    for (int i = 0; i < Global::get().getRebuildCount(); i++) {
+        rebuildTreeBeforeOutliersRemoval();
+    }
 
     std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
+    root_density = Global::get().getTree()->root->cf->getDensity();
+    std::cout << "Root density = " << root_density << std::endl;
+
+    // go through subclusters, collect nodecount, or nodecount * density to vector
+    // histogram of that values
+    // sort values
+    // find 0.01 percentile value = size() .. 100%; x .. 0.01%; x is index in histogram
+    // there is target value - subclusters with lower have to be removed / tried to reinsert first
+    std::map<float, int> validityScores;
+    fillValidityScores(Global::get().getTree()->root, validityScores);
+//    std::sort(validityScores.begin(), validityScores.end());
+
+//    for (unsigned int i = 0; i < validityScores.size(); i++) {
+//        std::cout << "ValidityScore = " << validityScores[i] << std::endl;
+//    }
+    for (auto it : validityScores) {
+        std::cout << "ValidityScore N = " << it.first << ", count = " << it.second << std::endl;
+    }
+    std::cout << "ValidityScores length = " << validityScores.size() << std::endl;
 
     // go through subclusters and select candidates for subclusters
-    min_density = Global::get().getTree()->root->cf->getDensity();
-    std::cout << "Root density = " << min_density << std::endl;
     std::vector<std::shared_ptr<CF>> candidates;
     findCandidates(Global::get().getTree()->root, candidates);
     std::cout << "Candidates count = " << candidates.size() << std::endl;
@@ -36,6 +57,29 @@ void removeOutliers() {
     tryInsertCandidates(candidates);
     std::cout << "Candidates count after reinsertion = " << candidates.size() << std::endl;
     std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
+}
+
+void fillValidityScores(std::shared_ptr<BNode> node, std::map<float, int>& validityScores) {
+    if (!node->isLeafNode()) {
+        std::shared_ptr<NLNode> nlnode = std::dynamic_pointer_cast<NLNode>(node);
+        for (auto child : nlnode->entries) {
+            fillValidityScores(child, validityScores);
+        }
+    } else {
+        std::shared_ptr<LNode> lnode = std::dynamic_pointer_cast<LNode>(node);
+        for (auto child : lnode->entries) {
+            // calculate the score
+            float act_score = child->N;
+            // try find it in validityScores vector
+            auto it = validityScores.find(act_score);
+            // if not there, add it
+            if (it == validityScores.end()) {
+                validityScores[act_score] = 1;
+            } else {
+                it->second++;
+            }
+        }
+    }
 }
 
 void findCandidates(std::shared_ptr<BNode> node, std::vector<std::shared_ptr<CF>>& candidates) {

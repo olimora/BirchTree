@@ -34,7 +34,7 @@ using namespace Rcpp;
 NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
                std::string distance_metric = "euclid", std::string cluster_size_metric = "radius",
                int memory_limit_MB = 0, int subcluster_limit = 50000, double rebuild_size_factor = 1,
-               bool remove_outliers = true) {
+               bool remove_outliers = true, int rebuild_count_before_outlier_removal = 2) {
 
     int rows = data.nrow();
     int cols = data.ncol();
@@ -51,6 +51,7 @@ NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold
     Global::get().setRebuildSizeFactor(rebuild_size_factor);
     Global::get().rebuild_count = 0;
     Global::get().setRemoveOutliers(remove_outliers);
+    Global::get().setRebuildCount(rebuild_count_before_outlier_removal);
 
     std::cout << "Building CF-Tree start" << std::endl;
 

@@ -17,5 +17,6 @@ int getColsCount();
 
 int getIndexInMatrix(int row, int col, int rows);
 void fillReturnMatrixWithSubclusters(std::shared_ptr<CFTree> tree, double* matrix);
+void fillReturnMatrixWithOutliers(std::vector<std::shared_ptr<CF>> outliers, double* matrix);
 
 #endif //BIRCH_TREE_UTILS_RETURN_MATRIX_H

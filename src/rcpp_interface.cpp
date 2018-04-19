@@ -31,7 +31,7 @@ using namespace Rcpp;
  * @param rebuild_size_factor -- 1 default - the bigger, the smaller is new T, and change in tree size
  */
 // [[Rcpp::export]]
-NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
+List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
                std::string distance_metric = "euclid", std::string cluster_size_metric = "radius",
                int memory_limit_MB = 0, int subcluster_limit = 50000, double rebuild_size_factor = 1,
                bool remove_outliers = true, int rebuild_count_before_outlier_removal = 2) {
@@ -96,9 +96,16 @@ NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold
 
     std::cout << "Points in tree = " << Global::get().getTree()->getPointCount() << std::endl;
 
+    List ret;
+
     // return subclusters in matrix: rows == subclusters, columns = centroid dimensions (//+N, +radius/diameter == clustersize )
-    NumericMatrix ret(getRowsCount(), getColsCount());
-    fillReturnMatrixWithSubclusters(Global::get().getTree(), ret.begin());
+    NumericMatrix subclusters_mat(getRowsCount(), getColsCount());
+    fillReturnMatrixWithSubclusters(Global::get().getTree(), subclusters_mat.begin());
+    ret["subclusters"] = subclusters_mat;
+
+    NumericMatrix outliers_mat(Global::get().outliers.size(), getColsCount());
+    fillReturnMatrixWithOutliers(Global::get().outliers, outliers_mat.begin());
+    ret["outliers"] = outliers_mat;
 
     return ret;
 }

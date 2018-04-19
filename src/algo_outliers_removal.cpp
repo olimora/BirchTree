@@ -8,15 +8,16 @@
 #include "algo_utils.h"
 #include <map>
 
-double root_density;
 int outliers_removed_subclusters;
 int outliers_removed_points;
+float border_N;
 
 void findCandidates(std::shared_ptr<BNode> node, std::vector<std::shared_ptr<CF>>& candidates);
 bool isCandidate(std::shared_ptr<CF>& cf);
 void tryInsertCandidates(std::vector<std::shared_ptr<CF>>& candidates);
 bool insertCandidate(std::shared_ptr<BNode> node, std::shared_ptr<CF> candidate);
-void fillValidityScores(std::shared_ptr<BNode> node, std::map<float, int>& validityScores);
+void fillHistogramN(std::shared_ptr<BNode> node, std::map<int, int> &histogram_N);
+float findDerivativeChange(std::map<int, int>& histogram_N, float max);
 
 void removeOutliers() {
     std::cout << "/// Outlier Removal ///////////////////////////////////////////" << std::endl;
@@ -27,25 +28,30 @@ void removeOutliers() {
     }
 
     std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
-    root_density = Global::get().getTree()->root->cf->getDensity();
-    std::cout << "Root density = " << root_density << std::endl;
 
     // go through subclusters, collect nodecount, or nodecount * density to vector
     // histogram of that values
     // sort values
     // find 0.01 percentile value = size() .. 100%; x .. 0.01%; x is index in histogram
     // there is target value - subclusters with lower have to be removed / tried to reinsert first
-    std::map<float, int> validityScores;
-    fillValidityScores(Global::get().getTree()->root, validityScores);
-//    std::sort(validityScores.begin(), validityScores.end());
+    std::map<int, int> histogram_N;
+    fillHistogramN(Global::get().getTree()->root, histogram_N);
 
-//    for (unsigned int i = 0; i < validityScores.size(); i++) {
-//        std::cout << "ValidityScore = " << validityScores[i] << std::endl;
-//    }
-    for (auto it : validityScores) {
-        std::cout << "ValidityScore N = " << it.first << ", count = " << it.second << std::endl;
+    float Min_N = std::pow(Global::get().getTree()->root->cf->N, 0.1);
+    float Max_N = std::pow(Global::get().getTree()->root->cf->N, 0.2);
+    float Target_N = std::pow(Global::get().getTree()->root->cf->N, 0.15);
+    float derivative_change = findDerivativeChange(histogram_N, Max_N);
+    float candidate_N = derivative_change;
+    if (candidate_N <= Min_N) candidate_N = std::ceil(Min_N);
+    if (candidate_N >= Max_N) candidate_N = std::floor(Max_N);
+    border_N = candidate_N;
+
+    for (auto it : histogram_N) {
+        std::cout << "Histogram N = " << it.first << ", count = " << it.second << std::endl;
     }
-    std::cout << "ValidityScores length = " << validityScores.size() << std::endl;
+    std::cout << "Histogram length = " << histogram_N.size() << std::endl;
+    std::cout << "Min_N = " << Min_N << "; Max_N = " << Max_N << "; Target_N = " << Target_N
+              << "; candid_N = " << candidate_N << "; border_N = " << border_N << std::endl;
 
     // go through subclusters and select candidates for subclusters
     std::vector<std::shared_ptr<CF>> candidates;
@@ -59,11 +65,47 @@ void removeOutliers() {
     std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
 }
 
-void fillValidityScores(std::shared_ptr<BNode> node, std::map<float, int>& validityScores) {
+float findDerivativeChange(std::map<int, int>& histogram_N, float max) {
+    auto begining = histogram_N.begin();
+    int prev_N = (*begining).first;
+    int prev_hist = (*begining).second;
+    int prev_diff = (*begining).second;
+    int act_N, act_hist, act_diff, prev_prev_N = prev_N;
+    begining++;
+
+    for (auto it = begining; it != histogram_N.end(); it++)
+    {
+        if ((*it).first > max) {
+            std::cout << "returning ......... max " << max << std::endl;
+            return max;
+        }
+        act_N = (*it).first;
+        act_hist = (*it).second;
+        act_diff = prev_hist - act_hist;
+        std::cout << "prev_hist = " << prev_hist << ", prev_diff = " << prev_diff
+                  << ", act_hist = " << act_hist << ", act_diff = " << act_diff << std::endl;
+        if (prev_hist <= act_hist) { // hist count derrivative change found
+            std::cout << "returning ... hist ... prev " << prev_N << std::endl;
+            return prev_N;
+        }
+        if (prev_diff <= act_diff) { // hist count diff derivative change found
+            std::cout << "returning ... diff ... prev " << prev_N << std::endl;
+            return prev_prev_N;
+        }
+        // before next iteration
+        prev_prev_N = prev_N;
+        prev_N = act_N;
+        prev_hist = act_hist;
+        prev_diff = act_diff;
+    }
+    return max;
+}
+
+void fillHistogramN(std::shared_ptr<BNode> node, std::map<int, int> &histogram_N) {
     if (!node->isLeafNode()) {
         std::shared_ptr<NLNode> nlnode = std::dynamic_pointer_cast<NLNode>(node);
         for (auto child : nlnode->entries) {
-            fillValidityScores(child, validityScores);
+            fillHistogramN(child, histogram_N);
         }
     } else {
         std::shared_ptr<LNode> lnode = std::dynamic_pointer_cast<LNode>(node);
@@ -71,10 +113,10 @@ void fillValidityScores(std::shared_ptr<BNode> node, std::map<float, int>& valid
             // calculate the score
             float act_score = child->N;
             // try find it in validityScores vector
-            auto it = validityScores.find(act_score);
+            auto it = histogram_N.find(act_score);
             // if not there, add it
-            if (it == validityScores.end()) {
-                validityScores[act_score] = 1;
+            if (it == histogram_N.end()) {
+                histogram_N[act_score] = 1;
             } else {
                 it->second++;
             }
@@ -114,11 +156,8 @@ void findCandidates(std::shared_ptr<BNode> node, std::vector<std::shared_ptr<CF>
     }
 }
 
-bool isCandidate(std::shared_ptr<CF>& cf) { //TODO: find a good way to identify a outlier candidate
-    double density = cf->getDensity();
-//    double point_count = cf->N;
-    if (density == 0) {
-//        std::cout << "density = " << density << ", N = " << point_count << std::endl;
+bool isCandidate(std::shared_ptr<CF>& cf) {
+    if (cf->N <= border_N) {
         return true;
     } else {
         return false;
@@ -133,6 +172,7 @@ void tryInsertCandidates(std::vector<std::shared_ptr<CF>>& candidates) {
         if (!inserted) {
             outliers_removed_subclusters++;
             outliers_removed_points += cand->N;
+            Global::get().outliers.push_back(cand);
         }
     }
     std::cout << "outliers removed subclusts = " << outliers_removed_subclusters

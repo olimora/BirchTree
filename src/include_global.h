@@ -46,6 +46,7 @@ public:
     double trhs_dist_sum;
     int trhs_dist_count;
     int rebuild_count;
+    std::vector<std::shared_ptr<CF>> outliers;
 
 	int getDimensions() { return this->dimensions; }
 	void setDimensions(int dims) { this->dimensions = dims;  }

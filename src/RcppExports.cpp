@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // buildTree
-NumericMatrix buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T, std::string distance_metric, std::string cluster_size_metric, int memory_limit_MB, int subcluster_limit, double rebuild_size_factor, bool remove_outliers, int rebuild_count_before_outlier_removal);
+List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T, std::string distance_metric, std::string cluster_size_metric, int memory_limit_MB, int subcluster_limit, double rebuild_size_factor, bool remove_outliers, int rebuild_count_before_outlier_removal);
 RcppExport SEXP _BirchTree_buildTree(SEXP dataSEXP, SEXP BF_BSEXP, SEXP BF_LSEXP, SEXP threshold_TSEXP, SEXP distance_metricSEXP, SEXP cluster_size_metricSEXP, SEXP memory_limit_MBSEXP, SEXP subcluster_limitSEXP, SEXP rebuild_size_factorSEXP, SEXP remove_outliersSEXP, SEXP rebuild_count_before_outlier_removalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

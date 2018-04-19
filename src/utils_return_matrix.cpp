@@ -68,3 +68,26 @@ void fillMatrixRow(std::shared_ptr<CF> cf, double *matrix) {
 
     (*I_ROW)++; //increment global row matrix index
 }
+
+void fillReturnMatrixWithOutliers(std::vector<std::shared_ptr<CF>> outliers, double* matrix) {
+    ROWS = outliers.size();
+    COLS = getColsCount();
+    int i_row = 0;
+    for (unsigned int i = 0; i < outliers.size(); i++) {
+        Vec fill_in = outliers[i]->getCentroid();
+        for (unsigned int col = 0; col < fill_in.size(); col++) {
+            // add it to proper place in matrix
+            // it goes by columns ... so can not put it in as row (continuing values)
+            // compute proper index in matrix for every value from ROWS, COLS, I_ROW, col
+            // matrix[index] = fill_in[col]
+            matrix[getIndexInMatrix(i_row, col, ROWS)] = fill_in[col];
+        }
+        // N
+        matrix[getIndexInMatrix(i_row, COLS-2, ROWS)] = outliers[i]->N;
+        // cluster size
+        matrix[getIndexInMatrix(i_row, COLS-1, ROWS)] = outliers[i]->getClusterSize();
+
+        i_row++; //increment global row matrix index
+    }
+    std::cout << "end" << std::endl;
+}

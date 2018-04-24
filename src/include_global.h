@@ -97,6 +97,10 @@ public:
 //        return this->new_tree;
 //    }
 
+    void resetOutliers() {
+	    this->outliers.clear();
+	}
+
     /// for check_tree
     int lvl;
 };

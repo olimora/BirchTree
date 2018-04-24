@@ -20,6 +20,9 @@ void fillHistogramN(std::shared_ptr<BNode> node, std::map<int, int> &histogram_N
 float findDerivativeChange(std::map<int, int>& histogram_N, float max);
 
 void removeOutliers() {
+    // reset outliers vector
+    Global::get().resetOutliers();
+
     std::cout << "/// Outlier Removal ///////////////////////////////////////////" << std::endl;
     // rebuild tree with the same threshold_T, to merge leaf entries, that are not outleirs
     std::cout << "Rebuilding tree to merge leaf entries." << std::endl;
@@ -44,14 +47,14 @@ void removeOutliers() {
     float candidate_N = derivative_change;
     if (candidate_N <= Min_N) candidate_N = std::ceil(Min_N);
     if (candidate_N >= Max_N) candidate_N = std::floor(Max_N);
-    border_N = candidate_N;
+    border_N = 1; // candidate_N;
 
-    for (auto it : histogram_N) {
-        std::cout << "Histogram N = " << it.first << ", count = " << it.second << std::endl;
-    }
-    std::cout << "Histogram length = " << histogram_N.size() << std::endl;
-    std::cout << "Min_N = " << Min_N << "; Max_N = " << Max_N << "; Target_N = " << Target_N
-              << "; candid_N = " << candidate_N << "; border_N = " << border_N << std::endl;
+//    for (auto it : histogram_N) {
+//        std::cout << "Histogram N = " << it.first << ", count = " << it.second << std::endl;
+//    }
+//    std::cout << "Histogram length = " << histogram_N.size() << std::endl;
+//    std::cout << "Min_N = " << Min_N << "; Max_N = " << Max_N << "; Target_N = " << Target_N
+//              << "; candid_N = " << candidate_N << "; border_N = " << border_N << std::endl;
 
     // go through subclusters and select candidates for subclusters
     std::vector<std::shared_ptr<CF>> candidates;
@@ -76,20 +79,20 @@ float findDerivativeChange(std::map<int, int>& histogram_N, float max) {
     for (auto it = begining; it != histogram_N.end(); it++)
     {
         if ((*it).first > max) {
-            std::cout << "returning ......... max " << max << std::endl;
+//            std::cout << "returning ......... max " << max << std::endl;
             return max;
         }
         act_N = (*it).first;
         act_hist = (*it).second;
         act_diff = prev_hist - act_hist;
-        std::cout << "prev_hist = " << prev_hist << ", prev_diff = " << prev_diff
-                  << ", act_hist = " << act_hist << ", act_diff = " << act_diff << std::endl;
+//        std::cout << "prev_hist = " << prev_hist << ", prev_diff = " << prev_diff
+//                  << ", act_hist = " << act_hist << ", act_diff = " << act_diff << std::endl;
         if (prev_hist <= act_hist) { // hist count derrivative change found
-            std::cout << "returning ... hist ... prev " << prev_N << std::endl;
+//            std::cout << "returning ... hist ... prev " << prev_N << std::endl;
             return prev_N;
         }
         if (prev_diff <= act_diff) { // hist count diff derivative change found
-            std::cout << "returning ... diff ... prev " << prev_N << std::endl;
+//            std::cout << "returning ... diff ... prev " << prev_N << std::endl;
             return prev_prev_N;
         }
         // before next iteration

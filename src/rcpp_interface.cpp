@@ -31,7 +31,7 @@ using namespace Rcpp;
  * @param rebuild_size_factor -- 1 default - the bigger, the smaller is new T, and change in tree size
  */
 // [[Rcpp::export]]
-List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T,
+List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T = 0,
                std::string distance_metric = "euclid", std::string cluster_size_metric = "radius",
                int memory_limit_MB = 0, int subcluster_limit = 50000, double rebuild_size_factor = 1,
                bool remove_outliers = true, int rebuild_count_before_outlier_removal = 2) {

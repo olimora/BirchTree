@@ -5,7 +5,7 @@
 #include "utils_return_matrix.h"
 #include "include_global.h"
 
-const int EXTRA_COLS_COUNT = 2; // N (number of points in subcluster), and cluster size (radius or diameter of subcluster)
+const int EXTRA_COLS_COUNT = 3; // N (number of points in subcluster), and cluster size (radius or diameter of subcluster), density
 int ROWS = 0;
 int COLS = 0;
 int* I_ROW;
@@ -62,9 +62,11 @@ void fillMatrixRow(std::shared_ptr<CF> cf, double *matrix) {
     }
 
     // N
-    matrix[getIndexInMatrix(*I_ROW, COLS-2, ROWS)] = cf->N;
+    matrix[getIndexInMatrix(*I_ROW, COLS-3, ROWS)] = cf->N;
     // cluster size
-    matrix[getIndexInMatrix(*I_ROW, COLS-1, ROWS)] = cf->getClusterSize();
+    matrix[getIndexInMatrix(*I_ROW, COLS-2, ROWS)] = cf->getClusterSize();
+    // density
+    matrix[getIndexInMatrix(*I_ROW, COLS-1, ROWS)] = cf->getDensity();
 
     (*I_ROW)++; //increment global row matrix index
 }
@@ -83,9 +85,11 @@ void fillReturnMatrixWithOutliers(std::vector<std::shared_ptr<CF>> outliers, dou
             matrix[getIndexInMatrix(i_row, col, ROWS)] = fill_in[col];
         }
         // N
-        matrix[getIndexInMatrix(i_row, COLS-2, ROWS)] = outliers[i]->N;
+        matrix[getIndexInMatrix(i_row, COLS-3, ROWS)] = outliers[i]->N;
         // cluster size
-        matrix[getIndexInMatrix(i_row, COLS-1, ROWS)] = outliers[i]->getClusterSize();
+        matrix[getIndexInMatrix(i_row, COLS-2, ROWS)] = outliers[i]->getClusterSize();
+        // density
+        matrix[getIndexInMatrix(i_row, COLS-1, ROWS)] = outliers[i]->getDensity();
 
         i_row++; //increment global row matrix index
     }

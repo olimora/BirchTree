@@ -8,26 +8,6 @@
 #include "algo_utils.h"
 #include <cmath>
 
-//bool isBefore(Path p1, Path p2) {
-//    if (p1.size() != p2.size()) {
-//        std::cout << "p1 = " << p1.size() << ", p2 = " << p2.size() << std::endl;
-//        throw std::invalid_argument( "isBefore(): Comparing paths: Vector size does not match." );
-//    } else {
-//        for (int i = 0; i < int(p1.size()); i++) {
-//            if (p1[i] == p2[i]) { // still same
-//                continue;
-//            } else {  // now different
-//                if (p1[i] < p2[i]) { // is smaller
-//                    return true;
-//                } else {            // is bigger
-//                    return false;
-//                }
-//            }
-//        }
-//        return false; // if loop went on 'continue' at all numbers
-//    }
-//}
-
 void recursiveThresholdCall(std::shared_ptr<BNode> node);
 void calculateNewThresholdT() {
     Global::get().trhs_dist_count = 0;
@@ -41,11 +21,11 @@ void calculateNewThresholdT() {
     double increase = std::abs((computed_T - Global::get().getThreshold_T())) / Global::get().getRebuildSizeFactor();
     double new_T = Global::get().getThreshold_T() + increase;
 
-    std::cout << "Old T = " << Global::get().getThreshold_T()
-              << ", computed_T = " << computed_T
-              << ", increase = " << increase
-              << ", new_T = " << new_T
-              << ", Diff = " << new_T - Global::get().getThreshold_T() << std::endl;
+//    std::cout << "Old T = " << Global::get().getThreshold_T()
+//              << ", computed_T = " << computed_T
+//              << ", increase = " << increase
+//              << ", new_T = " << new_T
+//              << ", Diff = " << new_T - Global::get().getThreshold_T() << std::endl;
 
     // set new thr
     Global::get().setThreshold_T(new_T);

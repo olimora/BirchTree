@@ -30,8 +30,6 @@ public:
     double getDensity();
 
     void addPoint(Vec point);
-
-    int getMemoryConsumed();
 };
 
 #endif //BIRCH_TREE_CLASS_CF_H

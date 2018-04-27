@@ -19,7 +19,7 @@ distanceFPtr assignDistanceMetric(std::string metric);
 
 double dist_D0(Vec A, Vec B);
 
-//double dist_D1(Vec A, Vec B);
+double dist_D1(Vec A, Vec B);
 
 // TODO:: other distance metrics
 

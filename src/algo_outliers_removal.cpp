@@ -25,12 +25,12 @@ void removeOutliers() {
 
     std::cout << "/// Outlier Removal ///////////////////////////////////////////" << std::endl;
     // rebuild tree with the same threshold_T, to merge leaf entries, that are not outleirs
-    std::cout << "Rebuilding tree to merge leaf entries." << std::endl;
+//    std::cout << "Rebuilding tree to merge leaf entries." << std::endl;
     for (int i = 0; i < Global::get().getRebuildCount(); i++) {
         rebuildTreeBeforeOutliersRemoval();
     }
 
-    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
+//    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
 
     // go through subclusters, collect nodecount, or nodecount * density to vector
     // histogram of that values
@@ -40,13 +40,13 @@ void removeOutliers() {
     std::map<int, int> histogram_N;
     fillHistogramN(Global::get().getTree()->root, histogram_N);
 
-    float Min_N = std::pow(Global::get().getTree()->root->cf->N, 0.1);
-    float Max_N = std::pow(Global::get().getTree()->root->cf->N, 0.2);
-    float Target_N = std::pow(Global::get().getTree()->root->cf->N, 0.15);
-    float derivative_change = findDerivativeChange(histogram_N, Max_N);
-    float candidate_N = derivative_change;
-    if (candidate_N <= Min_N) candidate_N = std::ceil(Min_N);
-    if (candidate_N >= Max_N) candidate_N = std::floor(Max_N);
+//    float Min_N = std::pow(Global::get().getTree()->root->cf->N, 0.1);
+//    float Max_N = std::pow(Global::get().getTree()->root->cf->N, 0.2);
+//    float Target_N = std::pow(Global::get().getTree()->root->cf->N, 0.15);
+//    float derivative_change = findDerivativeChange(histogram_N, Max_N);
+//    float candidate_N = derivative_change;
+//    if (candidate_N <= Min_N) candidate_N = std::ceil(Min_N);
+//    if (candidate_N >= Max_N) candidate_N = std::floor(Max_N);
     border_N = 1; // candidate_N;
 
 //    for (auto it : histogram_N) {
@@ -59,13 +59,13 @@ void removeOutliers() {
     // go through subclusters and select candidates for subclusters
     std::vector<std::shared_ptr<CF>> candidates;
     findCandidates(Global::get().getTree()->root, candidates);
-    std::cout << "Candidates count = " << candidates.size() << std::endl;
-    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
+//    std::cout << "Candidates count = " << candidates.size() << std::endl;
+//    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
 
     // try to insert (absorbe) candidates to tree without growing
     tryInsertCandidates(candidates);
-    std::cout << "Candidates count after reinsertion = " << candidates.size() << std::endl;
-    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
+//    std::cout << "Candidates count after reinsertion = " << candidates.size() << std::endl;
+//    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
 }
 
 float findDerivativeChange(std::map<int, int>& histogram_N, float max) {
@@ -178,9 +178,9 @@ void tryInsertCandidates(std::vector<std::shared_ptr<CF>>& candidates) {
             Global::get().outliers.push_back(cand);
         }
     }
-    std::cout << "outliers removed subclusts = " << outliers_removed_subclusters
+    std::cout << "outliers identified subclusts = " << outliers_removed_subclusters
               << ", points = " << outliers_removed_points
-              << ", or = " << candidates.size() << std::endl;
+              << ", candidates were = " << candidates.size() << std::endl;
 }
 
 bool insertCandidate(std::shared_ptr<BNode> node, std::shared_ptr<CF> candidate) {

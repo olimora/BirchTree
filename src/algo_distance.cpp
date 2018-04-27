@@ -19,8 +19,8 @@ double distance(Vec A, Vec B) {
 distanceFPtr assignDistanceMetric(std::string metric) {
     if (metric.compare(std::string("euclid")) == 0) {   // for Euclidean dist - D0
         return dist_D0;
-//    } else if (metric.compare(std::string("manhattan")) == 0) { // for Manhattan dist - D1
-//        return dist_D1;
+    } else if (metric.compare(std::string("manhattan")) == 0) { // for Manhattan dist - D1
+        return dist_D1;
     } else {   // else default
         return dist_D0;
     }
@@ -30,7 +30,7 @@ double dist_D0(Vec A, Vec B) {
     return std::sqrt(pow(A-B, 2).sum());
 }
 
-//double dist_D1(Vec A, Vec B) {
-//    return std::abs(A-B).sum(); // cant resolve abs func
-//}
+double dist_D1(Vec A, Vec B) {
+    return std::abs(A-B).sum();
+}
 

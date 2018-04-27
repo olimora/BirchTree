@@ -12,9 +12,6 @@ void countNodes(std::shared_ptr<BNode> node, std::vector<int> &counts) {
         auto lnode = std::dynamic_pointer_cast<LNode>(node);
         counts[2] += lnode->entries.size();
 
-        // memory consumed by LNode
-        counts[3] += lnode->getMemoryConsumed();
-        counts[3] += lnode->entries.size() * lnode->entries[0]->getMemoryConsumed();
     } else {
         counts[0]++;
 
@@ -23,14 +20,11 @@ void countNodes(std::shared_ptr<BNode> node, std::vector<int> &counts) {
         for (std::vector<int>::size_type i = 0; i < nlnode->entries.size(); i++) {
             countNodes(nlnode->entries[i], counts);
         }
-
-        // memory consumed by NLNode
-        counts[3] += nlnode->getMemoryConsumed();
     }
 }
 
 std::vector<int> cauntNodesCounts(std::shared_ptr<CFTree> tree) {
-    std::vector<int> counts(4); //[0] NLNodes, [1] LNodes, [2] subclusters, [3] memory consumed
+    std::vector<int> counts(3); //[0] NLNodes, [1] LNodes, [2] subclusters
 
     //call recursive function to tree and accumulate the counts
     countNodes(tree->root, counts); // starts with root

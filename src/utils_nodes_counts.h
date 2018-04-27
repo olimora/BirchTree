@@ -12,6 +12,8 @@
 #include "include_basic.h"
 #include "class_CFTree.h"
 
+// this functionality serves only for control, to control the tree structure
+
 std::vector<int> cauntNodesCounts(std::shared_ptr<CFTree> tree);
 
 #endif //BIRCH_TREE_UTILS_NODES_COUNTS_H

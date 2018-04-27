@@ -22,36 +22,23 @@ public:
     virtual bool isLeafNode() = 0;
     virtual int getBF() = 0;
 
-//    template <class Entry_T>
-//    std::vector<std::shared_ptr<Entry_T>> getEntries(); //TODO: a v derived to budu derived entries
-
     Vec getCentroid();
 };
 
 class NLNode : public BNode {
 public:
     std::vector<std::shared_ptr<BNode>> entries;
-    //std::vector<std::shared_ptr<NLEntry>> entries;
-
 
     NLNode();
 
     bool isLeafNode() { return false; }
     int getBF();
 
-//    template <BNode>
-//    std::vector<std::shared_ptr<BNode>> getEntries() { return this->entries; } ;
-
-    int getMemoryConsumed();
 };
 
 class LNode : public BNode {
 public:
     std::vector<std::shared_ptr<CF>> entries;
-    //std::vector<std::shared_ptr<LEntry>> entries;
-
-//    std::shared_ptr<LNode> left;
-//    std::shared_ptr<LNode> right;
 
     LNode();
     LNode(Vec point);
@@ -59,10 +46,6 @@ public:
     bool isLeafNode() { return true; }
     int getBF();
 
-//    template <CF>
-//    std::vector<std::shared_ptr<CF>> getEntries() { return this->entries; } ;
-
-    int getMemoryConsumed();
 };
 
 

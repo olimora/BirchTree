@@ -76,11 +76,11 @@ List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T = 0,
 
 //    checkTheTree(tree);
 
-    std::vector<int> nodesCounts = cauntNodesCounts(Global::get().getTree());
-    std::cout << "Nodes Counts control func: NLNode = " << nodesCounts[0]
-              << "; LNode = " << nodesCounts[1]
-              << "; Subclusters = " << nodesCounts[2]
-              << "; Memory = " << nodesCounts[3] << std::endl;
+//    std::vector<int> nodesCounts = cauntNodesCounts(Global::get().getTree());
+//    std::cout << "Nodes Counts control func: NLNode = " << nodesCounts[0]
+//              << "; LNode = " << nodesCounts[1]
+//              << "; Subclusters = " << nodesCounts[2]
+//              << "; Memory = " << nodesCounts[3] << std::endl;
 
     std::cout << "Nodes Counts mantained: NLNode = " << Global::get().getTree()->NLNode_count
             << "; LNode = " << Global::get().getTree()->LNode_count

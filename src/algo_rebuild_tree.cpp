@@ -96,10 +96,10 @@ void rebuildTree() {
               << "; LNode = " << Rebuilder::get().getTree()->LNode_count
               << "; Subclusters = " << Rebuilder::get().getTree()->subcluster_count << std::endl;
 
-    std::cout << "Available phys = " << MEMORY::getAvailablePhysical()
-              << "; Consumed phys = " << MEMORY::getConsumedPhysical()
-              << "; Available virt = " << MEMORY::getAvailableVirtual()
-              << "; Consumed virt = " << MEMORY::getConsumedVirtual() << std::endl;
+//    std::cout << "Available phys = " << MEMORY::getAvailablePhysical()
+//              << "; Consumed phys = " << MEMORY::getConsumedPhysical()
+//              << "; Available virt = " << MEMORY::getAvailableVirtual()
+//              << "; Consumed virt = " << MEMORY::getConsumedVirtual() << std::endl;
 
     // destroy old tree and put there the new one
     Global::get().getTree().reset();

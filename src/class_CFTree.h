@@ -16,7 +16,6 @@
 class CFTree {
 public:
     std::shared_ptr<NLNode> root;
-    int point_count;
     int NLNode_count;
     int LNode_count;
     int subcluster_count;

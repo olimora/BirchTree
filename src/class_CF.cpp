@@ -45,10 +45,6 @@ void CF::addPoint(Vec point) {
     this->SS += VEC::squaredSum(point);
 }
 
-int CF::getMemoryConsumed() {
-    int sum = sizeof(this->N) + sizeof(this->LS) + (this->LS.size() * sizeof(this->LS[0])) + sizeof(this->SS) + sizeof(this);
-    return sum;
-}
 
 //double CF::getRadius() {
 //    return calculateRadius(this->N, this->LS, this->SS, this->getCentroid());

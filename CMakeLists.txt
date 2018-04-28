@@ -19,4 +19,4 @@ add_executable(BIRCH_tree
         src/algo_build_tree.h
         src/algo_calculations.cpp
         src/algo_calculations.h
-        src/algo_distance.h src/algo_distance.cpp src/algo_utils.h src/algo_utils.cpp src/utils_check_tree.h src/utils_check_tree.cpp src/utils_nodes_counts.h src/utils_nodes_counts.cpp src/utils_memory_consumption.h src/utils_memory_consumption.cpp src/algo_rebuild_tree.h src/algo_rebuild_tree.cpp src/algo_rebuild_utils.h src/algo_rebuild_utils.cpp src/utils_return_matrix.h src/utils_return_matrix.cpp src/algo_outliers_removal.h src/algo_outliers_removal.cpp src/utils_memory_consumption2.cpp)
+        src/algo_distance.h src/algo_distance.cpp src/algo_utils.h src/algo_utils.cpp src/utils_check_tree.h src/utils_check_tree.cpp src/utils_nodes_counts.h src/utils_nodes_counts.cpp src/utils_memory_consumption.h src/utils_memory_consumption.cpp src/algo_rebuild_tree.h src/algo_rebuild_tree.cpp src/algo_rebuild_utils.h src/algo_rebuild_utils.cpp src/utils_return_matrix.h src/utils_return_matrix.cpp src/algo_outliers_removal.h src/algo_outliers_removal.cpp)

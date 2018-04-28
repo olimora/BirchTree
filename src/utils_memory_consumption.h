@@ -12,6 +12,7 @@
 //////////////////////////////////////////////////////////////////////////
 /// https://stackoverflow.com/questions/63166/how-to-determine-cpu-and-memory-consumption-from-inside-a-process
 /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa366770(v=vs.85).aspx
+/// http://nadeausoftware.com/articles/2012/07/c_c_tip_how_get_process_resident_set_size_physical_memory_use
 //////////////////////////////////////////////////////////////////////////
 
 namespace MEMORY {

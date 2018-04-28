@@ -19,12 +19,10 @@
 namespace MEMORY {
     float getTotalPhysical();
     float getAvailablePhysical();
-    float getTotalVirtual();
-    float getAvailableVirtual();
-    float getConsumedVirtual();
     float getConsumedPhysical();
-    size_t getPeakRSS();
-    size_t getCurrentRSS();
+//    float getTotalVirtual();
+//    float getAvailableVirtual();
+//    float getConsumedVirtual();
 }
 
 

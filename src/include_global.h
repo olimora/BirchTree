@@ -18,8 +18,8 @@ private:
     Global(const Global&);
     Global& operator=(const Global&);
 
-    size_t RSS_without_tree;
-    size_t RSS_peak = 0;
+    float memory_without_tree;
+	float memory_max = 0;
 
     int dimensions;
     int BF_B;
@@ -51,13 +51,13 @@ public:
     int rebuild_count;
     std::vector<std::shared_ptr<CF>> outliers;
 
-	size_t getRSSWithoutTree() { return this->RSS_without_tree; }
-	void setRSSWithoutTree(size_t rss) { this->RSS_without_tree = rss;  }
+	float getMemoryWithoutTree() { return this->memory_without_tree; }
+	void setMemoryWithoutTree(float mem) { this->memory_without_tree = mem;  }
 
-	size_t getRSSPeak() { return this->RSS_peak; }
-	void setRSSPeak(size_t rss) {
-		if (rss > this->RSS_peak) {
-			this->RSS_peak = rss;
+	float getMemoryMax() { return this->memory_max; }
+	void setMemoryMax(float mem) {
+		if (mem > this->memory_max) {
+			this->memory_max = mem;
 		}
 	}
 

@@ -40,8 +40,8 @@ List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T = 0,
     int cols = data.ncol();
 
     // set globals
-    Global::get().setRSSWithoutTree(MEMORY::getCurrentRSS());
-    Global::get().setRSSPeak(MEMORY::getPeakRSS());
+    Global::get().setMemoryWithoutTree(MEMORY::getConsumedPhysical());
+    Global::get().setMemoryMax(MEMORY::getConsumedPhysical());
     Global::get().setDimensions(cols);
     Global::get().setBF_B(BF_B);
     Global::get().setBF_L(BF_L);
@@ -109,11 +109,11 @@ List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T = 0,
     fillReturnMatrixWithOutliers(Global::get().outliers, outliers_mat.begin());
     ret["outliers"] = outliers_mat;
 
-    Global::get().setRSSPeak(MEMORY::getPeakRSS());
-    std::cout << "Memory without tree = " << (Global::get().getRSSWithoutTree() / pow(1024, 2)) << std::endl;
-    std::cout << "Memory peak = " << (Global::get().getRSSPeak() / pow(1024, 2)) << std::endl;
-    std::cout << "Memory of tree MAX = " << (Global::get().getRSSPeak() - Global::get().getRSSWithoutTree() / pow(1024, 2)) << std::endl;
-    std::cout << "Memory of tree NOW = " << (MEMORY::getCurrentRSS() - Global::get().getRSSWithoutTree() / pow(1024, 2)) << std::endl;
+    std::cout << "Memory without tree = " << Global::get().getMemoryWithoutTree() << std::endl;
+    std::cout << "Memory NOW = " << MEMORY::getConsumedPhysical() << std::endl;
+    std::cout << "Memory MAX = " << Global::get().getMemoryMax() << std::endl;
+    std::cout << "Memory of tree NOW = " << MEMORY::getConsumedPhysical() - Global::get().getMemoryWithoutTree() << std::endl;
+    std::cout << "Memory of tree MAX = " << Global::get().getMemoryMax() - Global::get().getMemoryWithoutTree() << std::endl;
 
     return ret;
 }

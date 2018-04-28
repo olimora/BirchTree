@@ -41,10 +41,9 @@ void rebuildTreeIfNeeded() {
     if (physical_memory_limit_exceeded || allowed_memory_limit_exceeded || subcluster_count_limit_exceeded) {
         std::cout << "Need to rebuild the tree." << std::endl;
 
+        Global::get().setMemoryMax(MEMORY::getConsumedPhysical());
         std::cout << "Available phys = " << MEMORY::getAvailablePhysical()
                   << "; Consumed phys = " << MEMORY::getConsumedPhysical()
-                  << "; Consumed RSS = " << (MEMORY::getCurrentRSS() / pow(1024, 2))
-                  << "; Consumed RSS Peak = " << (MEMORY::getPeakRSS() / pow(1024, 2))
                   << "; Subclusters = " << Global::get().getTree()->subcluster_count << std::endl;
 
 

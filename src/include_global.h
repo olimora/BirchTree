@@ -18,6 +18,9 @@ private:
     Global(const Global&);
     Global& operator=(const Global&);
 
+    size_t RSS_without_tree;
+    size_t RSS_peak = 0;
+
     int dimensions;
     int BF_B;
     int BF_L;
@@ -47,6 +50,16 @@ public:
     int trhs_dist_count;
     int rebuild_count;
     std::vector<std::shared_ptr<CF>> outliers;
+
+	size_t getRSSWithoutTree() { return this->RSS_without_tree; }
+	void setRSSWithoutTree(size_t rss) { this->RSS_without_tree = rss;  }
+
+	size_t getRSSPeak() { return this->RSS_peak; }
+	void setRSSPeak(size_t rss) {
+		if (rss > this->RSS_peak) {
+			this->RSS_peak = rss;
+		}
+	}
 
 	int getDimensions() { return this->dimensions; }
 	void setDimensions(int dims) { this->dimensions = dims;  }

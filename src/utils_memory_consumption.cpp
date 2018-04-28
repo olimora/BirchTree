@@ -61,6 +61,12 @@ namespace MEMORY {
         GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PPROCESS_MEMORY_COUNTERS>(&pmc), sizeof(pmc));
         return bytesToMegabytes(pmc.WorkingSetSize);
     }
+
+//    float getConsumedPhysicalPeak() {
+//        PROCESS_MEMORY_COUNTERS_EX pmc;
+//        GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PPROCESS_MEMORY_COUNTERS>(&pmc), sizeof(pmc));
+//        return bytesToMegabytes(pmc.PeakWorkingSetSize);
+//    }
 }
 
 //////////////////

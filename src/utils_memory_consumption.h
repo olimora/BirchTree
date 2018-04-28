@@ -5,6 +5,8 @@
 #ifndef BIRCH_TREE_UTILS_MEMORY_CONSUMPTION_H
 #define BIRCH_TREE_UTILS_MEMORY_CONSUMPTION_H
 
+#include <c++/cstddef>
+
 #ifdef _MSC_VER
 #pragma once
 #endif
@@ -21,6 +23,8 @@ namespace MEMORY {
     float getAvailableVirtual();
     float getConsumedVirtual();
     float getConsumedPhysical();
+    size_t getPeakRSS();
+    size_t getCurrentRSS();
 }
 
 

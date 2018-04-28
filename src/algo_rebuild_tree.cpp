@@ -43,8 +43,8 @@ void rebuildTreeIfNeeded() {
 
         std::cout << "Available phys = " << MEMORY::getAvailablePhysical()
                   << "; Consumed phys = " << MEMORY::getConsumedPhysical()
-                  << "; Available virt = " << MEMORY::getAvailableVirtual()
-                  << "; Consumed virt = " << MEMORY::getConsumedVirtual()
+                  << "; Consumed RSS = " << (MEMORY::getCurrentRSS() / pow(1024, 2))
+                  << "; Consumed RSS Peak = " << (MEMORY::getPeakRSS() / pow(1024, 2))
                   << "; Subclusters = " << Global::get().getTree()->subcluster_count << std::endl;
 
 

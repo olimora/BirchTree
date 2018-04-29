@@ -23,7 +23,7 @@ void rebuildTreeIfNeeded() {
 
     if (MEMORY::getAvailablePhysical() <= MEMORY_RESERVE_MB) {
         physical_memory_limit_exceeded = true;
-        std::cout << "Physical memory limit exceeded. ";
+        std::cout << "Available memory limit exceeded. ";
     }
     if (Global::get().getMemoryLimitMB() > 0
         && MEMORY::getConsumedPhysical() >= Global::get().getMemoryLimitMB()) {

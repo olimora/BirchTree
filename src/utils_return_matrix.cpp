@@ -93,5 +93,4 @@ void fillReturnMatrixWithOutliers(std::vector<std::shared_ptr<CF>> outliers, dou
 
         i_row++; //increment global row matrix index
     }
-    std::cout << "end" << std::endl;
 }

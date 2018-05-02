@@ -1,6 +1,8 @@
 //
 // Created by omora on 2018-04-06.
 //
+// Served only for control during implementation.
+//
 
 #ifndef BIRCH_TREE_UTILS_NODES_COUNTS_H
 #define BIRCH_TREE_UTILS_NODES_COUNTS_H

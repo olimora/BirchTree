@@ -109,11 +109,11 @@ List buildTree(NumericMatrix data, int BF_B, int BF_L, double threshold_T = 0,
     fillReturnMatrixWithOutliers(Global::get().outliers, outliers_mat.begin());
     ret["outliers"] = outliers_mat;
 
-    std::cout << "Memory without tree = " << Global::get().getMemoryWithoutTree() << std::endl;
-    std::cout << "Memory NOW = " << MEMORY::getConsumedPhysical() << std::endl;
-    std::cout << "Memory MAX = " << Global::get().getMemoryMax() << std::endl;
-    std::cout << "Memory of tree NOW = " << MEMORY::getConsumedPhysical() - Global::get().getMemoryWithoutTree() << std::endl;
-    std::cout << "Memory of tree MAX = " << Global::get().getMemoryMax() - Global::get().getMemoryWithoutTree() << std::endl;
+//    std::cout << "Memory without tree = " << Global::get().getMemoryWithoutTree() << std::endl;
+//    std::cout << "Memory NOW = " << MEMORY::getConsumedPhysical() << std::endl;
+//    std::cout << "Memory MAX = " << Global::get().getMemoryMax() << std::endl;
+//    std::cout << "Memory of tree NOW = " << MEMORY::getConsumedPhysical() - Global::get().getMemoryWithoutTree() << std::endl;
+//    std::cout << "Memory of tree MAX = " << Global::get().getMemoryMax() - Global::get().getMemoryWithoutTree() << std::endl;
 
     return ret;
 }

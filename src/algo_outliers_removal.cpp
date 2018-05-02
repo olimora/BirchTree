@@ -68,41 +68,41 @@ void removeOutliers() {
 //    std::cout << "Root N count = " << Global::get().getTree()->root->cf->N << std::endl;
 }
 
-float findDerivativeChange(std::map<int, int>& histogram_N, float max) {
-    auto begining = histogram_N.begin();
-    int prev_N = (*begining).first;
-    int prev_hist = (*begining).second;
-    int prev_diff = (*begining).second;
-    int act_N, act_hist, act_diff, prev_prev_N = prev_N;
-    begining++;
-
-    for (auto it = begining; it != histogram_N.end(); it++)
-    {
-        if ((*it).first > max) {
-//            std::cout << "returning ......... max " << max << std::endl;
-            return max;
-        }
-        act_N = (*it).first;
-        act_hist = (*it).second;
-        act_diff = prev_hist - act_hist;
-//        std::cout << "prev_hist = " << prev_hist << ", prev_diff = " << prev_diff
-//                  << ", act_hist = " << act_hist << ", act_diff = " << act_diff << std::endl;
-        if (prev_hist <= act_hist) { // hist count derrivative change found
-//            std::cout << "returning ... hist ... prev " << prev_N << std::endl;
-            return prev_N;
-        }
-        if (prev_diff <= act_diff) { // hist count diff derivative change found
-//            std::cout << "returning ... diff ... prev " << prev_N << std::endl;
-            return prev_prev_N;
-        }
-        // before next iteration
-        prev_prev_N = prev_N;
-        prev_N = act_N;
-        prev_hist = act_hist;
-        prev_diff = act_diff;
-    }
-    return max;
-}
+//float findDerivativeChange(std::map<int, int>& histogram_N, float max) {
+//    auto begining = histogram_N.begin();
+//    int prev_N = (*begining).first;
+//    int prev_hist = (*begining).second;
+//    int prev_diff = (*begining).second;
+//    int act_N, act_hist, act_diff, prev_prev_N = prev_N;
+//    begining++;
+//
+//    for (auto it = begining; it != histogram_N.end(); it++)
+//    {
+//        if ((*it).first > max) {
+////            std::cout << "returning ......... max " << max << std::endl;
+//            return max;
+//        }
+//        act_N = (*it).first;
+//        act_hist = (*it).second;
+//        act_diff = prev_hist - act_hist;
+////        std::cout << "prev_hist = " << prev_hist << ", prev_diff = " << prev_diff
+////                  << ", act_hist = " << act_hist << ", act_diff = " << act_diff << std::endl;
+//        if (prev_hist <= act_hist) { // hist count derrivative change found
+////            std::cout << "returning ... hist ... prev " << prev_N << std::endl;
+//            return prev_N;
+//        }
+//        if (prev_diff <= act_diff) { // hist count diff derivative change found
+////            std::cout << "returning ... diff ... prev " << prev_N << std::endl;
+//            return prev_prev_N;
+//        }
+//        // before next iteration
+//        prev_prev_N = prev_N;
+//        prev_N = act_N;
+//        prev_hist = act_hist;
+//        prev_diff = act_diff;
+//    }
+//    return max;
+//}
 
 void fillHistogramN(std::shared_ptr<BNode> node, std::map<int, int> &histogram_N) {
     if (!node->isLeafNode()) {
